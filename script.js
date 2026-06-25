@@ -1,11 +1,13 @@
 // ===== 3D THREE.JS ANIMATION =====
-(function initThree() {
+(function initHero3D() {
     const container = document.getElementById('three-container');
+    if (!container) return;
+
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0f0e0e);
+    scene.background = new THREE.Color(0xf8f6f3);
 
     const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 2, 8);
+    camera.position.set(0, 1.5, 6);
     camera.lookAt(0, 0, 0);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
@@ -14,142 +16,150 @@
     renderer.shadowMap.enabled = true;
     container.appendChild(renderer.domElement);
 
-    // ===== LIGHTS =====
-    const ambientLight = new THREE.AmbientLight(0x404060);
+    // Lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
     scene.add(ambientLight);
 
-    const dirLight = new THREE.DirectionalLight(0xffeedd, 1);
-    dirLight.position.set(5, 10, 7);
-    dirLight.castShadow = true;
-    scene.add(dirLight);
+    const mainLight = new THREE.DirectionalLight(0xffeedd, 0.8);
+    mainLight.position.set(3, 5, 5);
+    mainLight.castShadow = true;
+    scene.add(mainLight);
 
-    const backLight = new THREE.PointLight(0xd4a859, 0.5);
-    backLight.position.set(-3, 1, 5);
-    scene.add(backLight);
-
-    const goldLight = new THREE.PointLight(0xd4a859, 0.8);
-    goldLight.position.set(2, 3, 4);
+    const goldLight = new THREE.PointLight(0xb8956a, 0.5);
+    goldLight.position.set(2, 1, 4);
     scene.add(goldLight);
 
-    // ===== MAIN 3D GROUP =====
+    // Main Group
     const group = new THREE.Group();
     scene.add(group);
 
-    // ===== CENTRAL CUBE WITH GOLD EDGES =====
-    const cubeMat = new THREE.MeshStandardMaterial({
-        color: 0xd4a859,
-        metalness: 0.7,
-        roughness: 0.2,
-        emissive: 0x0f0e0e,
-        emissiveIntensity: 0.1
+    // Simple Coffee Cup
+    const cupGroup = new THREE.Group();
+
+    // Cup body
+    const cupGeo = new THREE.CylinderGeometry(0.8, 0.6, 1.2, 32, 1, true);
+    const cupMat = new THREE.MeshPhysicalMaterial({
+        color: 0xb8956a,
+        metalness: 0.2,
+        roughness: 0.3,
+        transparent: true,
+        opacity: 0.9,
+        side: THREE.DoubleSide,
     });
-    const cube = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.2, 1.2), cubeMat);
-    cube.castShadow = true;
-    group.add(cube);
+    const cup = new THREE.Mesh(cupGeo, cupMat);
+    cup.position.y = 0.2;
+    cup.castShadow = true;
+    cupGroup.add(cup);
 
-    // Glowing edges
-    const edges = new THREE.EdgesGeometry(new THREE.BoxGeometry(1.2, 1.2, 1.2));
-    const lineMat = new THREE.LineBasicMaterial({ color: 0xd4a859 });
-    const wireframe = new THREE.LineSegments(edges, lineMat);
-    group.add(wireframe);
+    // Cup bottom
+    const bottomGeo = new THREE.CircleGeometry(0.6, 32);
+    const bottomMat = new THREE.MeshPhysicalMaterial({
+        color: 0xb8956a,
+        metalness: 0.3,
+        roughness: 0.3,
+        side: THREE.DoubleSide
+    });
+    const bottom = new THREE.Mesh(bottomGeo, bottomMat);
+    bottom.rotation.x = -Math.PI / 2;
+    bottom.position.y = -0.4;
+    cupGroup.add(bottom);
 
-    // ===== FLOATING PARTICLES (STARS) =====
-    const particleCount = 300;
+    // Cup top (coffee)
+    const topGeo = new THREE.CircleGeometry(0.7, 32);
+    const topMat = new THREE.MeshPhysicalMaterial({
+        color: 0x3a2a1a,
+        roughness: 0.8,
+        metalness: 0.0,
+        side: THREE.DoubleSide
+    });
+    const top = new THREE.Mesh(topGeo, topMat);
+    top.rotation.x = -Math.PI / 2;
+    top.position.y = 0.79;
+    cupGroup.add(top);
+
+    // Handle
+    const handleShape = new THREE.Shape();
+    handleShape.moveTo(0.8, 0.1);
+    handleShape.quadraticCurveTo(1.2, 0.1, 1.2, 0.4);
+    handleShape.quadraticCurveTo(1.2, 0.7, 0.8, 0.7);
+    const handleGeo = new THREE.ShapeGeometry(handleShape);
+    const handleMat = new THREE.MeshPhysicalMaterial({
+        color: 0xb8956a,
+        metalness: 0.2,
+        roughness: 0.3,
+        side: THREE.DoubleSide
+    });
+    const handle = new THREE.Mesh(handleGeo, handleMat);
+    handle.position.set(0, 0.1, 0);
+    cupGroup.add(handle);
+
+    cupGroup.position.y = -0.2;
+    group.add(cupGroup);
+
+    // Particles (simple floating)
+    const particleCount = 150;
     const posArray = new Float32Array(particleCount * 3);
-    for (let i = 0; i < particleCount * 3; i++) {
-        posArray[i] = (Math.random() - 0.5) * 16;
+    for (let i = 0; i < particleCount; i++) {
+        posArray[i*3] = (Math.random() - 0.5) * 4;
+        posArray[i*3+1] = Math.random() * 2.5;
+        posArray[i*3+2] = (Math.random() - 0.5) * 4;
     }
     const particleGeo = new THREE.BufferGeometry();
     particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+
     const particleMat = new THREE.PointsMaterial({
-        color: 0xd4a859,
+        color: 0xb8956a,
         size: 0.03,
         transparent: true,
-        opacity: 0.6,
-        blending: THREE.AdditiveBlending
+        opacity: 0.3,
+        blending: THREE.AdditiveBlending,
+        sizeAttenuation: true
     });
     const particles = new THREE.Points(particleGeo, particleMat);
-    scene.add(particles);
+    particles.position.y = 0.2;
+    group.add(particles);
 
-    // ===== ROTATING RINGS =====
-    const ringMat = new THREE.MeshStandardMaterial({
-        color: 0xd4a859,
-        metalness: 0.3,
-        roughness: 0.7,
-        transparent: true,
-        opacity: 0.25,
-        wireframe: true
-    });
-    const ring1 = new THREE.Mesh(new THREE.TorusGeometry(1.8, 0.04, 16, 32), ringMat);
-    ring1.rotation.x = Math.PI / 2;
-    group.add(ring1);
-
-    const ring2 = new THREE.Mesh(new THREE.TorusGeometry(2.1, 0.03, 16, 32), ringMat);
-    ring2.rotation.z = Math.PI / 3;
-    ring2.rotation.x = Math.PI / 4;
-    group.add(ring2);
-
-    // ===== SMALL FLOATING SPHERES =====
-    const smallSpheres = [];
-    for (let i = 0; i < 8; i++) {
-        const sphereMat = new THREE.MeshStandardMaterial({
-            color: 0xd4a859,
-            metalness: 0.8,
-            roughness: 0.2,
-            emissive: 0xd4a859,
-            emissiveIntensity: 0.1
-        });
-        const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.1, 8, 8), sphereMat);
-        const angle = (i / 8) * Math.PI * 2;
-        const radius = 1.6;
-        sphere.position.set(Math.cos(angle) * radius, Math.sin(angle) * 0.6, Math.sin(angle) * radius * 0.4);
-        group.add(sphere);
-        smallSpheres.push({ mesh: sphere, angle: angle, radius: radius, speed: 0.5 + Math.random() * 0.3 });
-    }
-
-    // ===== MOUSE INTERACTION =====
+    // Mouse interaction
     let mouseX = 0, mouseY = 0;
     document.addEventListener('mousemove', (e) => {
         mouseX = (e.clientX / window.innerWidth) * 2 - 1;
         mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
     });
 
-    // ===== RESIZE HANDLER =====
+    // Resize
     window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    // ===== ANIMATION LOOP =====
+    // Animation
     let time = 0;
     function animate() {
         requestAnimationFrame(animate);
         time += 0.01;
 
-        // Rotate main group
-        group.rotation.x = Math.sin(time * 0.2) * 0.1;
-        group.rotation.y += 0.008;
-        group.rotation.z = Math.sin(time * 0.15) * 0.05;
+        group.rotation.y += 0.003;
+        group.rotation.x = Math.sin(time * 0.1) * 0.03;
 
-        // Ring rotations
-        ring1.rotation.z += 0.005;
-        ring2.rotation.y += 0.007;
+        cupGroup.position.y = -0.2 + Math.sin(time * 0.5) * 0.05;
 
-        // Float spheres
-        smallSpheres.forEach((s, i) => {
-            s.mesh.position.x = Math.cos(time * s.speed + s.angle) * s.radius;
-            s.mesh.position.z = Math.sin(time * s.speed + s.angle) * s.radius * 0.4;
-            s.mesh.position.y = Math.sin(time * 0.5 + i) * 0.3;
-        });
+        // Animate particles
+        const positions = particles.geometry.attributes.position.array;
+        for (let i = 0; i < particleCount; i++) {
+            positions[i*3+1] += 0.001;
+            if (positions[i*3+1] > 2.5) {
+                positions[i*3+1] = 0.5;
+                positions[i*3] = (Math.random() - 0.5) * 4;
+                positions[i*3+2] = (Math.random() - 0.5) * 4;
+            }
+        }
+        particles.geometry.attributes.position.needsUpdate = true;
 
-        // Particle rotation
-        particles.rotation.y += 0.0005;
-
-        // Camera follow mouse (gentle)
-        camera.position.x += (mouseX * 0.8 - camera.position.x) * 0.02;
-        camera.position.y += (mouseY * 0.4 + 1.5 - camera.position.y) * 0.02;
-        camera.lookAt(0, 0, 0);
+        // Camera follow
+        camera.position.x += (mouseX * 0.3 - camera.position.x) * 0.01;
+        camera.position.y += (mouseY * 0.2 + 1.5 - camera.position.y) * 0.01;
+        camera.lookAt(0, 0.2, 0);
 
         renderer.render(scene, camera);
     }
@@ -184,11 +194,11 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// ===== RESERVATION FORM (Demo) =====
+// ===== RESERVATION FORM =====
 document.getElementById('reservationForm')?.addEventListener('submit', function(e) {
     e.preventDefault();
     alert('✅ Thank you! Your table has been reserved. We will contact you shortly.');
     this.reset();
 });
 
-console.log('🚀 The Secret Space 3D website loaded successfully!');
+console.log('☕ The Secret Space – Professional Website Loaded!');
