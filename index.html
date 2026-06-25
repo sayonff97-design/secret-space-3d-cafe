@@ -1,160 +1,261 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>The Secret Space | Premium 3D Cafe</title>
+<!-- Three.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <!-- Three.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
-    <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-
-    <!-- ===== NAVBAR ===== -->
-    <nav class="navbar" id="navbar">
-        <div class="container">
-            <a href="#" class="logo">The <span>Secret</span> Space</a>
-            <div class="nav-menu" id="navMenu">
-                <a href="#about">About</a>
-                <a href="#menu">Menu</a>
-                <a href="#reservation">Reserve</a>
-                <a href="#contact">Contact</a>
-            </div>
-            <div class="nav-actions">
-                <a href="#reservation" class="btn-nav-book">
-                    <i class="fas fa-calendar-check"></i> Book Table
+<!-- Hero Section -->
+<section class="hero" id="home">
+    <div id="three-container"></div>
+    <div class="hero-overlay">
+        <div class="hero-content">
+            <span class="hero-badge"><i class="fas fa-crown"></i> Cooch Behar's #1 Premium Cafe</span>
+            <h1>Where Every <br><span class="highlight">Moment</span> Tastes <br>Like <span class="highlight">Magic</span></h1>
+            <p>Experience the finest coffee, hookah, and gourmet food in an exclusive, cozy atmosphere.</p>
+            <div class="hero-buttons">
+                <a href="#reservation" class="btn-primary">
+                    <i class="fas fa-calendar-plus"></i> Reserve Your Table
                 </a>
-                <div class="hamburger" id="hamburger">
-                    <i class="fas fa-bars"></i>
-                </div>
+                <a href="#menu" class="btn-outline">
+                    <i class="fas fa-utensils"></i> Explore Menu
+                </a>
             </div>
         </div>
-    </nav>
+    </div>
+</section>
 
-    <!-- ===== 3D HERO SECTION ===== -->
-    <section class="hero" id="home">
-        <div id="three-container"></div>
-        <div class="hero-overlay">
-            <div class="hero-content">
-                <span class="hero-badge"><i class="fas fa-crown"></i> Cooch Behar's #1 Premium Cafe</span>
-                <h1>Where Every <br><span class="highlight">Moment</span> Tastes <br>Like <span class="highlight">Magic</span></h1>
-                <p>Experience the finest coffee, hookah, and gourmet food in an exclusive, cozy atmosphere.</p>
-                <div class="hero-buttons">
-                    <a href="#reservation" class="btn-primary">
-                        <i class="fas fa-calendar-plus"></i> Reserve Your Table
-                    </a>
-                    <a href="#menu" class="btn-outline">
-                        <i class="fas fa-utensils"></i> Explore Menu
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
+<script>
+    (function initHero3D() {
+        const container = document.getElementById('three-container');
+        if (!container) return;
 
-    <!-- ===== ABOUT / SPECIALS ===== -->
-    <section class="specials" id="about">
-        <div class="container">
-            <div class="section-header">
-                <span class="tag"><i class="fas fa-star"></i> Why Choose Us</span>
-                <h2>Our <span class="highlight">Specialties</span></h2>
-                <p>We don't just serve food – we create experiences.</p>
-            </div>
-            <div class="specials-grid">
-                <div class="special-card"><i class="fas fa-fire"></i><h4>Premium Hookah</h4><p>Exclusive flavors in a relaxing, cozy setup.</p></div>
-                <div class="special-card"><i class="fas fa-film"></i><h4>Private Theatre</h4><p>Enjoy movies with your loved ones in total privacy.</p></div>
-                <div class="special-card"><i class="fas fa-heart"></i><h4>Couple Friendly</h4><p>Designed for intimate moments and special dates.</p></div>
-                <div class="special-card"><i class="fas fa-music"></i><h4>Live Music Nights</h4><p>Unwind with soulful music every weekend.</p></div>
-            </div>
-        </div>
-    </section>
+        // --- Scene Setup ---
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0f0e0e);
 
-    <!-- ===== MENU ===== -->
-    <section class="menu" id="menu">
-        <div class="container">
-            <div class="section-header">
-                <span class="tag"><i class="fas fa-utensils"></i> Our Menu</span>
-                <h2>Handcrafted <span class="highlight">Delights</span></h2>
-                <p>Every dish is prepared with love and the finest ingredients.</p>
-            </div>
-            <div class="menu-grid">
-                <div class="menu-item"><div class="icon"><i class="fas fa-pizza-slice"></i></div><h4>Secret Space Special Pizza</h4><span class="price">₹299</span><p>Loaded with exotic toppings and our signature cheese blend.</p><span class="tag">Bestseller</span></div>
-                <div class="menu-item"><div class="icon"><i class="fas fa-drumstick-bite"></i></div><h4>Turkish Shawarma Plate</h4><span class="price">₹249</span><p>Juicy grilled chicken with special Turkish mayo and kubos.</p><span class="tag">Popular</span></div>
-                <div class="menu-item"><div class="icon"><i class="fas fa-mug-hot"></i></div><h4>Signature Cold Coffee</h4><span class="price">₹149</span><p>Rich, creamy, and topped with a drizzle of caramel.</p></div>
-                <div class="menu-item"><div class="icon"><i class="fas fa-burger"></i></div><h4>Secret Space Special Burger</h4><span class="price">₹269</span><p>Double patty with house special sauce and crispy fries.</p></div>
-                <div class="menu-item"><div class="icon"><i class="fas fa-wine-glass-alt"></i></div><h4>Virgin Mojito</h4><span class="price">₹159</span><p>Refreshing mint, lime, and soda – the perfect cooler.</p></div>
-                <div class="menu-item"><div class="icon"><i class="fas fa-ice-cream"></i></div><h4>Oreo Shake</h4><span class="price">₹199</span><p>Loaded with Oreo crumbles and topped with whipped cream.</p><span class="tag">New</span></div>
-            </div>
-        </div>
-    </section>
+        const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 1.5, 6);
+        camera.lookAt(0, 0, 0);
 
-    <!-- ===== RESERVATION ===== -->
-    <section class="reservation" id="reservation">
-        <div class="container">
-            <div class="section-header">
-                <span class="tag"><i class="fas fa-calendar-check"></i> Reserve Now</span>
-                <h2>Book Your <span class="highlight">Table</span></h2>
-                <p>Secure your spot for an unforgettable experience.</p>
-            </div>
-            <div class="reservation-grid">
-                <div class="reservation-info">
-                    <h3>Visit Us</h3>
-                    <p>We're open 7 days a week. Walk-ins are welcome, but reservations are recommended.</p>
-                    <div class="info-item"><i class="fas fa-clock"></i><span><strong>Hours:</strong> 11:00 AM – 10:30 PM</span></div>
-                    <div class="info-item"><i class="fas fa-map-marker-alt"></i><span>Silver Jubilee Rd, near Sani Mandir, Cooch Behar</span></div>
-                    <div class="info-item"><i class="fas fa-phone"></i><span><a href="tel:+916023195991" style="color:var(--gold);">+91 60231 95991</a></span></div>
-                    <a href="https://wa.me/916023195991" target="_blank" class="btn-primary" style="margin-top:16px;"><i class="fab fa-whatsapp"></i> Order via WhatsApp</a>
-                </div>
-                <div class="reservation-form">
-                    <form id="reservationForm">
-                        <div class="form-group"><label>Full Name <span style="color:var(--gold);">*</span></label><input type="text" id="resName" placeholder="Enter your name" required /></div>
-                        <div class="form-group"><label>Phone <span style="color:var(--gold);">*</span></label><input type="tel" id="resPhone" placeholder="Enter phone number" required /></div>
-                        <div class="form-row"><div class="form-group"><label>Date <span style="color:var(--gold);">*</span></label><input type="date" id="resDate" required /></div><div class="form-group"><label>Time <span style="color:var(--gold);">*</span></label><input type="time" id="resTime" required /></div></div>
-                        <div class="form-group"><label>Guests <span style="color:var(--gold);">*</span></label><input type="number" id="resGuests" placeholder="Number of guests" min="1" required /></div>
-                        <button type="submit" class="btn-primary" style="width:100%; justify-content:center;"><i class="fas fa-check-circle"></i> Reserve Table</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.shadowMap.enabled = true;
+        container.appendChild(renderer.domElement);
 
-    <!-- ===== CONTACT ===== -->
-    <section class="contact" id="contact">
-        <div class="container">
-            <div class="section-header">
-                <span class="tag"><i class="fas fa-phone"></i> Get in Touch</span>
-                <h2>Contact <span class="highlight">Us</span></h2>
-                <p>We'd love to hear from you!</p>
-            </div>
-            <div class="contact-grid">
-                <div>
-                    <div class="contact-card"><i class="fas fa-map-marker-alt"></i><div><h4>Address</h4><p>Silver Jubilee Rd, near Sani Mandir, Cooch Behar</p></div></div>
-                    <div class="contact-card"><i class="fas fa-phone"></i><div><h4>Call</h4><p><a href="tel:+916023195991">+91 60231 95991</a></p></div></div>
-                    <div class="contact-card"><i class="fas fa-clock"></i><div><h4>Hours</h4><p>11:00 AM – 10:30 PM (Mon-Sun)</p></div></div>
-                </div>
-                <div class="map-container">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d28612.653561982144!2d89.633333!3d26.316667!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39e3e8c8d4f3f7e7%3A0x8d7f3b7e5d7f3b7e!2sTufanganj%2C%20West%20Bengal!5e0!3m2!1sen!2sin!4v1700000000000" loading="lazy"></iframe>
-                </div>
-            </div>
-        </div>
-    </section>
+        // --- Lights ---
+        const ambientLight = new THREE.AmbientLight(0x404060);
+        scene.add(ambientLight);
 
-    <!-- ===== FOOTER ===== -->
-    <footer class="footer">
-        <div class="container">
-            <div class="social"><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-youtube"></i></a><a href="#"><i class="fab fa-whatsapp"></i></a></div>
-            <p>&copy; 2024 <span class="brand">The Secret Space</span> | All Rights Reserved</p>
-            <p style="margin-top:8px; font-size:0.8rem;">Designed with <i class="fas fa-heart" style="color:var(--gold);"></i> for unforgettable experiences</p>
-        </div>
-    </footer>
+        const mainLight = new THREE.DirectionalLight(0xffeedd, 1);
+        mainLight.position.set(3, 5, 5);
+        mainLight.castShadow = true;
+        scene.add(mainLight);
 
-    <a href="https://wa.me/916023195991" target="_blank" class="whatsapp-float"><i class="fab fa-whatsapp"></i></a>
+        const goldLight = new THREE.PointLight(0xd4a859, 0.8);
+        goldLight.position.set(2, 1, 4);
+        scene.add(goldLight);
 
-    <script src="script.js"></script>
-</body>
-</html>
+        const backLight = new THREE.PointLight(0x6c5ce7, 0.4);
+        backLight.position.set(-3, 0, 3);
+        scene.add(backLight);
+
+        // --- Main 3D Group ---
+        const group = new THREE.Group();
+        scene.add(group);
+
+        // --- Create a 3D Coffee Cup ---
+        const cupGroup = new THREE.Group();
+
+        // Cup Body (Cylinder with curved top)
+        const cupGeo = new THREE.CylinderGeometry(0.8, 0.6, 1.2, 32, 1, true);
+        const cupMat = new THREE.MeshPhysicalMaterial({
+            color: 0xd4a859,
+            metalness: 0.3,
+            roughness: 0.2,
+            transparent: true,
+            opacity: 0.85,
+            side: THREE.DoubleSide,
+            clearcoat: 0.1
+        });
+        const cup = new THREE.Mesh(cupGeo, cupMat);
+        cup.position.y = 0.2;
+        cup.castShadow = true;
+        cupGroup.add(cup);
+
+        // Cup Bottom
+        const bottomGeo = new THREE.CircleGeometry(0.6, 32);
+        const bottomMat = new THREE.MeshPhysicalMaterial({
+            color: 0xd4a859,
+            metalness: 0.4,
+            roughness: 0.3,
+            side: THREE.DoubleSide
+        });
+        const bottom = new THREE.Mesh(bottomGeo, bottomMat);
+        bottom.rotation.x = -Math.PI / 2;
+        bottom.position.y = -0.4;
+        cupGroup.add(bottom);
+
+        // Cup Top (Opening)
+        const topGeo = new THREE.CircleGeometry(0.8, 32);
+        const topMat = new THREE.MeshPhysicalMaterial({
+            color: 0x2a1f1a,
+            roughness: 0.8,
+            metalness: 0.1,
+            side: THREE.DoubleSide
+        });
+        const top = new THREE.Mesh(topGeo, topMat);
+        top.rotation.x = -Math.PI / 2;
+        top.position.y = 0.8;
+        cupGroup.add(top);
+
+        // Coffee inside
+        const coffeeGeo = new THREE.CircleGeometry(0.7, 32);
+        const coffeeMat = new THREE.MeshPhysicalMaterial({
+            color: 0x3a1f0d,
+            roughness: 0.9,
+            metalness: 0.0,
+            side: THREE.DoubleSide
+        });
+        const coffee = new THREE.Mesh(coffeeGeo, coffeeMat);
+        coffee.rotation.x = -Math.PI / 2;
+        coffee.position.y = 0.79;
+        cupGroup.add(coffee);
+
+        // Cup Handle
+        const handleShape = new THREE.Shape();
+        handleShape.moveTo(0.8, 0.1);
+        handleShape.quadraticCurveTo(1.2, 0.1, 1.2, 0.4);
+        handleShape.quadraticCurveTo(1.2, 0.7, 0.8, 0.7);
+        const handleGeo = new THREE.ShapeGeometry(handleShape);
+        const handleMat = new THREE.MeshPhysicalMaterial({
+            color: 0xd4a859,
+            metalness: 0.3,
+            roughness: 0.2,
+            side: THREE.DoubleSide
+        });
+        const handle = new THREE.Mesh(handleGeo, handleMat);
+        handle.position.set(0, 0.1, 0);
+        handle.rotation.z = -0.1;
+        cupGroup.add(handle);
+
+        cupGroup.position.y = -0.3;
+        group.add(cupGroup);
+
+        // --- Floating Particles (Steam) ---
+        const particleCount = 400;
+        const posArray = new Float32Array(particleCount * 3);
+        const sizes = new Float32Array(particleCount);
+        for (let i = 0; i < particleCount; i++) {
+            const radius = 0.8 + Math.random() * 1.2;
+            const angle = Math.random() * Math.PI * 2;
+            const height = Math.random() * 2.0;
+            posArray[i*3] = Math.cos(angle) * radius * 0.5;
+            posArray[i*3+1] = height + 0.5;
+            posArray[i*3+2] = Math.sin(angle) * radius * 0.5;
+            sizes[i] = 0.02 + Math.random() * 0.04;
+        }
+        const particleGeo = new THREE.BufferGeometry();
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        particleGeo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+        const particleMat = new THREE.PointsMaterial({
+            color: 0xd4a859,
+            size: 0.04,
+            transparent: true,
+            opacity: 0.5,
+            blending: THREE.AdditiveBlending,
+            sizeAttenuation: true
+        });
+        const particles = new THREE.Points(particleGeo, particleMat);
+        particles.position.y = 0.2;
+        group.add(particles);
+
+        // --- Glowing Ring ---
+        const ringMat = new THREE.MeshBasicMaterial({
+            color: 0xd4a859,
+            transparent: true,
+            opacity: 0.15,
+            wireframe: true
+        });
+        const ring = new THREE.Mesh(new THREE.TorusGeometry(1.4, 0.03, 16, 64), ringMat);
+        ring.rotation.x = Math.PI / 2;
+        ring.position.y = 0.2;
+        group.add(ring);
+
+        // --- Small Orbiting Spheres ---
+        const spheres = [];
+        for (let i = 0; i < 6; i++) {
+            const sphereMat = new THREE.MeshPhysicalMaterial({
+                color: 0xd4a859,
+                metalness: 0.7,
+                roughness: 0.2,
+                emissive: 0xd4a859,
+                emissiveIntensity: 0.1
+            });
+            const sphere = new THREE.Mesh(new THREE.SphereGeometry(0.06, 8, 8), sphereMat);
+            const angle = (i / 6) * Math.PI * 2;
+            const radius = 1.6;
+            sphere.position.set(Math.cos(angle) * radius, Math.sin(angle * 2) * 0.2, Math.sin(angle) * radius);
+            group.add(sphere);
+            spheres.push({ mesh: sphere, angle: angle, radius: radius, speed: 0.3 + Math.random() * 0.2 });
+        }
+
+        // --- Mouse Interaction ---
+        let mouseX = 0, mouseY = 0;
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        // --- Resize Handler ---
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // --- Animation Loop ---
+        let time = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.01;
+
+            // Rotate whole group slowly
+            group.rotation.y += 0.004;
+            group.rotation.x = Math.sin(time * 0.15) * 0.05;
+            group.rotation.z = Math.sin(time * 0.1) * 0.03;
+
+            // Float the cup
+            cupGroup.position.y = -0.3 + Math.sin(time * 0.5) * 0.05;
+
+            // Rotate ring
+            ring.rotation.z += 0.005;
+
+            // Animate particles (steam)
+            const positions = particles.geometry.attributes.position.array;
+            for (let i = 0; i < particleCount; i++) {
+                positions[i*3+1] += 0.002;
+                if (positions[i*3+1] > 2.5) {
+                    positions[i*3+1] = 0.5;
+                    positions[i*3] = (Math.random() - 0.5) * 1.2;
+                    positions[i*3+2] = (Math.random() - 0.5) * 1.2;
+                }
+            }
+            particles.geometry.attributes.position.needsUpdate = true;
+
+            // Animate orbiting spheres
+            spheres.forEach((s, i) => {
+                s.mesh.position.x = Math.cos(time * s.speed + s.angle) * s.radius;
+                s.mesh.position.z = Math.sin(time * s.speed + s.angle) * s.radius;
+                s.mesh.position.y = Math.sin(time * 0.5 + i) * 0.2;
+            });
+
+            // Camera follow mouse (gentle)
+            camera.position.x += (mouseX * 0.5 - camera.position.x) * 0.01;
+            camera.position.y += (mouseY * 0.3 + 1.5 - camera.position.y) * 0.01;
+            camera.lookAt(0, 0.2, 0);
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+    })();
+</script>
